@@ -53,35 +53,35 @@
         <h1>Semester Marks Calculator</h1>
         <div class="semester">
             <input type="number" id="marks1" placeholder="1st Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total1" placeholder="1st Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total1" placeholder="1st Sem Total Marks" onkeydown="checkEnter(event, 1)">
         </div>
         <div class="semester">
             <input type="number" id="marks2" placeholder="2nd Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total2" placeholder="2nd Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total2" placeholder="2nd Sem Total Marks" onkeydown="checkEnter(event, 2)">
         </div>
         <div class="semester">
             <input type="number" id="marks3" placeholder="3rd Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total3" placeholder="3rd Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total3" placeholder="3rd Sem Total Marks" onkeydown="checkEnter(event, 3)">
         </div>
         <div class="semester">
             <input type="number" id="marks4" placeholder="4th Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total4" placeholder="4th Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total4" placeholder="4th Sem Total Marks" onkeydown="checkEnter(event, 4)">
         </div>
         <div class="semester">
             <input type="number" id="marks5" placeholder="5th Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total5" placeholder="5th Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total5" placeholder="5th Sem Total Marks" onkeydown="checkEnter(event, 5)">
         </div>
         <div class="semester">
             <input type="number" id="marks6" placeholder="6th Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total6" placeholder="6th Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total6" placeholder="6th Sem Total Marks" onkeydown="checkEnter(event, 6)">
         </div>
         <div class="semester">
             <input type="number" id="marks7" placeholder="7th Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total7" placeholder="7th Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total7" placeholder="7th Sem Total Marks" onkeydown="checkEnter(event, 7)">
         </div>
         <div class="semester">
             <input type="number" id="marks8" placeholder="8th Sem Marks Obtained" oninput="calculatePercentage()">
-            <input type="number" id="total8" placeholder="8th Sem Total Marks" oninput="calculatePercentage()">
+            <input type="text" id="total8" placeholder="8th Sem Total Marks" onkeydown="checkEnter(event, 8)">
         </div>
         <div class="result">
             <p id="result1"></p>
@@ -89,6 +89,23 @@
         </div>
     </div>
     <script>
+        function checkEnter(event, semester) {
+            if (event.key === "Enter") {
+                calculateTotal(semester);
+            }
+        }
+
+        function calculateTotal(semester) {
+            const totalField = document.getElementById(`total${semester}`);
+            const totalStr = totalField.value;
+            const totalArr = totalStr.split('+').map(val => parseFloat(val.trim())).filter(val => !isNaN(val));
+			console.log(totalArr);
+            const totalSum = totalArr.reduce((acc, val) => acc + val, 0);
+            totalField.value = totalSum;
+			console.log(totalSum);
+            calculatePercentage();
+        }
+
         function calculatePercentage() {
             let marks = [];
             let totals = [];
@@ -99,10 +116,11 @@
 
             let percentages = marks.map((mark, index) => totals[index] ? (mark / totals[index]) * 100 : 0);
             let totalPercentage = percentages.reduce((acc, val) => acc + val, 0) / 8;
-
-            let agg1 = (percentages[1] + percentages[2] + percentages[3] + percentages[4]) / 4 * 0.6;
-            let agg2 = (percentages[5] + percentages[6] + percentages[7] + percentages[8]) / 4 * 0.4;
-            let aggregate = agg1 + agg2;
+			
+			console.log(percentages,"%es")
+            let agg1 = (percentages[1] + percentages[2] + percentages[3] + percentages[4]) / 4;
+            let agg2 = (percentages[5] + percentages[6] + percentages[7] + percentages[8]) / 4;
+            let aggregate = agg1*.6 + agg2 * .4;
 
             document.getElementById("result1").innerText = `Total Percentage: ${totalPercentage.toFixed(2)}%`;
             document.getElementById("result2").innerText = `Aggregate Percentage: ${aggregate.toFixed(2)}%`;
